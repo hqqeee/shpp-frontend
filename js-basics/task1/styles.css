@@ -32,3 +32,40 @@
 .green {
     background-color: green;
 }
+
+#cursor-position{
+    text-align: right;
+}
+
+#top {
+    position: fixed;
+    bottom: 0;
+}
+
+#popup-background {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 5000;
+}
+
+#drop-area {
+    border-radius: 20px;
+    width: 480px;
+    padding: 20px;
+}
+
+.default-border {
+    border: 2px solid #ccc;
+}
+
+.blue-border {
+    border-color:  blue;
+}
+
+.purple-border {
+    border-color: purple;
+}

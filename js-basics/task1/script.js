@@ -44,9 +44,7 @@ task3Btn.addEventListener("click", toggleHiddenAllSquares, false);
 const hideButton = document.getElementById("task4btn");
 function hideByQuerySelector(){
     let elements = document.querySelectorAll(document.getElementById('selectorInput').value);
-    console.log(elements)
     for(let i = 0; i < elements.length; i++){
-        console.log(elements[i]);
         if(elements[i].classList.contains("hidden")){
             elements[i].classList.remove("hidden");
         } else {
@@ -107,3 +105,152 @@ function showImage() {
     task8Img.setAttribute("src", imageUrl);
 }
 task8Btn.addEventListener("click", showImage);
+
+/** TASK 9 */
+const task9Input = document.getElementById("task9-textarea");
+const task9Btn = document.getElementById("task9-btn");
+
+function showImages(){
+    let lines = task9Input.value.split('\n');
+    lines.forEach((link) => {
+        let img = document.createElement('img');
+        img.src = link;
+        document.getElementById("image-box").appendChild(img);
+    });
+}
+
+task9Btn.addEventListener("click", showImages);
+
+/** TASK 10 */
+const xCordElem = document.getElementById('x-pos');
+const yCordElem = document.getElementById('y-pos');
+
+function changeCords() {
+    xCordElem.innerText = event.clientX;
+    yCordElem.innerText = event.clientY;
+}
+
+document.addEventListener("mousemove", changeCords);
+/** TASK 11 */
+document.getElementById('selected-lang').innerText = navigator.language;
+
+/** TASK 12 */
+const latitude = document.getElementById('latitude');
+const longitude = document.getElementById('longitude');
+navigator.geolocation.getCurrentPosition((position) => {
+    latitude.innerText = position.coords.latitude;
+    longitude.innerText = position.coords.longitude;
+})
+
+/** TASK 13 */
+const editableTextLocalStorage = document.getElementById('editable-text-localStorage');
+function saveTextToLocalStorage() {
+    localStorage.setItem('editableText', editableTextLocalStorage.innerText);
+}
+editableTextLocalStorage.addEventListener("blur", saveTextToLocalStorage);
+
+const editableTextCookies = document.getElementById('editable-text-cookies');
+function saveTextToCookies() {
+    document.cookie = 'editableText=' + editableTextCookies.innerText;
+}
+editableTextCookies.addEventListener("blur", saveTextToCookies);
+
+const editableTextSessionStorage = document.getElementById('editable-text-sessionStorage');
+function saveTextSessionStorage() {
+    sessionStorage.setItem('editableText', editableTextSessionStorage.innerText);
+}
+editableTextSessionStorage.addEventListener("blur", saveTextSessionStorage);
+
+window.addEventListener("load", (event) => {
+    editableTextLocalStorage.innerText = localStorage.getItem('editableText');
+
+    let cookiesName = "editableText=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(cookiesName) === 0) {
+            editableTextCookies.innerText =  c.substring(cookiesName.length, c.length);
+        }
+    }
+
+    editableTextSessionStorage.innerText = sessionStorage.getItem('editableText');
+})
+
+/** TASK 14 */
+const topBtn = document.getElementById('top');
+
+function showTopBtn() {
+    if(document.body.scrollTop > 20 || document.documentElement.scrollTop > 20){
+        topBtn.classList.remove('hidden');
+    } else {
+        topBtn.classList.add('hidden');
+    }
+}
+function scrollTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+window.addEventListener('scroll', showTopBtn);
+topBtn.addEventListener('click', scrollTop);
+
+/** TASK 15 */
+const outerBlock = document.getElementById('outer-block');
+const innerBlock = document.getElementById('inner-block');
+outerBlock.addEventListener('click', () => alert("Outer"));
+innerBlock.addEventListener('click', () => {
+    alert('Inner');
+    event.stopPropagation();
+});
+
+/** TASK 16 */
+const grayScreenButton = document.getElementById('gray-screen');
+const popupBackground = document.getElementById('popup-background');
+grayScreenButton.addEventListener('click', () =>{
+    popupBackground.classList.remove('hidden');
+    disableScroll();
+});
+popupBackground.addEventListener('click', () => {
+    window.onscroll = function() {};
+    popupBackground.classList.add('hidden');
+})
+function disableScroll() {
+    scrollTop = document.documentElement.scrollTop;
+    scrollLeft = document.documentElement.scrollLeft;
+        window.onscroll = function() {
+            window.scrollTo(scrollLeft, scrollTop);
+        };
+}
+/** TASK 17 */
+
+document.querySelector('form').addEventListener('submit', (event) => {
+    event.preventDefault();
+})
+
+/** TASK 18 */
+const dropArea = document.getElementById('drop-area');
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false)
+})
+function preventDefaults (e) {
+    e.preventDefault()
+    e.stopPropagation()
+}
+['dragenter','dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, () =>{
+        dropArea.classList.add('blue-border');
+    })
+});
+
+['dragleave','drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, () =>{
+        dropArea.classList.remove('blue-border');
+    })
+});
+const fileInput = document.getElementById('fileInput');
+
+dropArea.addEventListener('drop', (event) => {
+  fileInput.files = event.dataTransfer.files;
+  dropArea.classList.add('purple-border');
+});
