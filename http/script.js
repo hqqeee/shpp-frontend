@@ -27,12 +27,13 @@ function generateColumnsWithValues(resp, columns) {
     return columnsWithValues;
 }
 
+const table = document.createElement("table");
+
 function generateTable(columnsWithValues, config) {
     config.tableLength = columnsWithValues.reduce((max, column) => Math.max(max, column.values.length), 0);
-    const table = document.createElement("table");
     table.createTHead();
     const tbody = table.createTBody();
-    const trHead = table.insertRow();
+    const trHead = table.createTHead();
     const trBody = Array.from({
         length: config.tableLength
     }, (_) => table.insertRow());
@@ -87,4 +88,59 @@ async function deleteUser(id, config) {
     await fetch(`${config.apiUrl}/${id}`, {
         method: 'DELETE'
     }).then(() => window.location.reload())
+}
+
+const btn = document.getElementById("add-btn");
+btn.addEventListener("click", () => {
+    btn.remove();
+    const newRow = table.insertRow(0);
+    newRow.setAttribute('id', 'add-record-row');
+    tableConfig.columns.forEach((column, index) => {
+        let inputField = document.createElement('input');
+        inputField.setAttribute('type', 'text');
+        inputField.setAttribute('placeholder', column.title);
+        inputField.setAttribute('name', column.value);
+        let cell = newRow.insertCell(index);
+        cell.appendChild(inputField);
+    })
+    let btnCell = newRow.insertCell(newRow.cells.length);
+    let newBtn = document.createElement('button');
+    newBtn.innerText = 'Add';
+    newBtn.addEventListener('click', () => addRecord(newRow));
+    btnCell.appendChild(newBtn);
+})
+
+function addRecord(newRow) {
+    let data;
+    try {
+        data = [...newRow.cells].map(cell => cell.children[0])
+            .filter(e => e.getAttribute('type') === 'text')
+            .reduce((acc, inputField) => {
+            if (inputField.getAttribute('name') && inputField.value) {
+                inputField.style.outline = 'initial';
+                acc[inputField.getAttribute('name')] = inputField.value;
+                return acc;
+            } else {
+                inputField.style.outline = '2px solid red';
+                throw new Error(`Field ${inputField.getAttribute('name')} is not set`);
+            }
+        }, {});
+    } catch (e){
+        console.error(e);
+        return;
+    }
+    fetch(tableConfig.apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
