@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./assets/styles/main.css">
+</head>
+<body>
+<div class="timer-wrap">
+    <h1>Timer</h1>
+    <div class="starter-block" id="starter-block">
+        <h2>Specify time in minutes.</h2>
+        <div class="selection-block">
+            <button id="dec-btn">-</button>
+            <span id="time-in-minutes">0</span>
+            <button id="inc-btn">+</button>
+        </div>
+        <button id="start-btn">Start</button>
+    </div>
+    <div class="timer-block hidden" id="timer-block">
+        <h2>Time left</h2>
+        <div id="time-left"></div>
+    </div>
+</div>
+<script src="./assets/scripts/bundle.js"></script>
+</body>
+</html>
