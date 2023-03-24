@@ -62,12 +62,32 @@ hey2(b)
 
 
 // 4.3
-//  type extendedAObj = aObj & ({type: string, coolness: number} | {type: "cat", cuteness: number} );
+//  type extendedAObj = aObj & ({type: "cat", cuteness: number} | {type: Exclude<string, "cat">, coolness: number});
 // type extendedAObj = aObj & {coolness?: number} & ({type: string} | {type: "cat", cuteness?: number});
-type extendedAObj = aObj & {type: string} & {cuteness?: number} & {coolness?: number};
+ type extendedAObj = aObj & {type: string} & {cuteness?: number} & {coolness?: number};
 function hey3(a:extendedAObj) {
     return "hey! i'm " + a.name()
-        + (a.type === "cat" ? ("cuteness: "+a.cuteness) : ("coolness: "+a.coolness))
+         + (a.type === "cat" ? ("cuteness: "+a.cuteness) : ("coolness: "+a.coolness))
 }
 hey3({name: () => "snizhok", type: "cat", cuteness: 100})
 hey3({name: () => "sirko", type: "dog", coolness: 100})
+
+
+
+// 5.
+
+// google for Record type
+function stringEntries(a: Record<number, any>) {
+    return Array.isArray(a) ? a : Object.keys(a)
+}
+
+// 6.
+// ....can be hard, don't worry and SKIP if you do not know how to do it
+
+async function world(a:number) {
+    return "*".repeat(a)
+}
+const hello = async () => {
+    return await world(10)
+}
+hello().then(r => console.log(r)).catch(e => console.log("fail"))
